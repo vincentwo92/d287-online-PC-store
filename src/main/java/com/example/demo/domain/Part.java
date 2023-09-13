@@ -85,8 +85,6 @@ public abstract class Part implements Serializable {
     }
 
     public void validateInventory(BindingResult bindingResult) {
-
-
         if (inv < 0) {
             // implementing original validator (@Min = 0) for inv
             bindingResult.rejectValue("inv", "inventory.negative", "inventory cannot be negative");
