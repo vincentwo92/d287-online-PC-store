@@ -33,12 +33,25 @@ public class EnufPartsValidator implements ConstraintValidator<ValidEnufParts, P
         if (product.getId() != 0) {
             Product myProduct = repo.findById((int) product.getId());
             for (Part p : myProduct.getParts()) {
-                if (p.getInv()<(product.getInv()-myProduct.getInv()))return false;
+                if (p.getInv()<(product.getInv()-myProduct.getInv())) {
+                    constraintValidatorContext.disableDefaultConstraintViolation();
+                    constraintValidatorContext.buildConstraintViolationWithTemplate(
+                            "There aren't enough parts in inventory!"
+                    ).addConstraintViolation();
+                    return false;
+                }
+                if (p.getInv() - (product.getInv()-myProduct.getInv()) < p.getMinInv()) {
+                    constraintValidatorContext.disableDefaultConstraintViolation();
+                    constraintValidatorContext.buildConstraintViolationWithTemplate(
+                            "Some parts have reached their minimum inventory!"
+                    ).addConstraintViolation();
+                    return false;
+                }
             }
             return true;
         }
         else{
-                return true;
+            return true;
             }
     }
 }
