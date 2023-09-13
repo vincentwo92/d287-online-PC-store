@@ -85,7 +85,7 @@ public class BootStrapData implements CommandLineRunner {
             logiMouse.setPrice(23.00);
             logiMouse.setInv(70);
             logiMouse.setMinInv(3);
-            logiMouse.setMinInv(500);
+            logiMouse.setMaxInv(500);
             logiMouse.setCompanyName("Logitech");
 
             outsourcedPartRepository.save(rtx4090);
