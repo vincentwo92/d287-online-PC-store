@@ -1,8 +1,10 @@
 package com.example.demo.bootstrap;
 
+import com.example.demo.domain.InhousePart;
 import com.example.demo.domain.OutsourcedPart;
 import com.example.demo.domain.Part;
 import com.example.demo.domain.Product;
+import com.example.demo.repositories.InhousePartRepository;
 import com.example.demo.repositories.OutsourcedPartRepository;
 import com.example.demo.repositories.PartRepository;
 import com.example.demo.repositories.ProductRepository;
@@ -30,7 +32,8 @@ public class BootStrapData implements CommandLineRunner {
 
     private final OutsourcedPartRepository outsourcedPartRepository;
 
-    public BootStrapData(PartRepository partRepository, ProductRepository productRepository, OutsourcedPartRepository outsourcedPartRepository) {
+    public BootStrapData(PartRepository partRepository, ProductRepository productRepository, OutsourcedPartRepository
+            outsourcedPartRepository) {
         this.partRepository = partRepository;
         this.productRepository = productRepository;
         this.outsourcedPartRepository=outsourcedPartRepository;
@@ -39,38 +42,58 @@ public class BootStrapData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-       /*
-        OutsourcedPart o= new OutsourcedPart();
-        o.setCompanyName("Western Governors University");
-        o.setName("out test");
-        o.setInv(5);
-        o.setPrice(20.0);
-        o.setId(100L);
-        outsourcedPartRepository.save(o);
-        OutsourcedPart thePart=null;
-        List<OutsourcedPart> outsourcedParts=(List<OutsourcedPart>) outsourcedPartRepository.findAll();
-        for(OutsourcedPart part:outsourcedParts){
-            if(part.getName().equals("out test"))thePart=part;
-        }
-
-        System.out.println(thePart.getCompanyName());
-        */
-        List<OutsourcedPart> outsourcedParts=(List<OutsourcedPart>) outsourcedPartRepository.findAll();
-        for(OutsourcedPart part:outsourcedParts){
-            System.out.println(part.getName()+" "+part.getCompanyName());
-        }
-
+        // code used for testing empty inventories
         /*
-        Product bicycle= new Product("bicycle",100.0,15);
-        Product unicycle= new Product("unicycle",100.0,15);
-        productRepository.save(bicycle);
-        productRepository.save(unicycle);
+        outsourcedPartRepository.deleteAll();
+        partRepository.deleteAll();
+        productRepository.deleteAll();
         */
+
+        // sample inventory to be added on start up if zero inventory detected
+        if (partRepository.count() == 0 && productRepository.count() == 0) {
+            OutsourcedPart rtx4090 = new OutsourcedPart();
+            rtx4090.setName("RTX 4090");
+            rtx4090.setPrice(1600.00);
+            rtx4090.setInv(5);
+            rtx4090.setCompanyName("Nvidia");
+            OutsourcedPart rx7900xtx = new OutsourcedPart();
+            rx7900xtx.setName("RX 7900XTX");
+            rx7900xtx.setPrice(1200.00);
+            rx7900xtx.setInv(8);
+            rx7900xtx.setCompanyName("AMD");
+            OutsourcedPart evo970 = new OutsourcedPart();
+            evo970.setName("EVO 970 SSD 1TB");
+            evo970.setPrice(90.00);
+            evo970.setInv(100);
+            evo970.setCompanyName("Samsung");
+            OutsourcedPart fractalTorrent = new OutsourcedPart();
+            fractalTorrent.setName("Fractal Torrent");
+            fractalTorrent.setPrice(230.00);
+            fractalTorrent.setInv(15);
+            fractalTorrent.setCompanyName("Fractal");
+            OutsourcedPart logiMouse = new OutsourcedPart();
+            logiMouse.setName("Logitech G203 Mouse");
+            logiMouse.setPrice(23.00);
+            logiMouse.setInv(70);
+            logiMouse.setCompanyName("Logitech");
+
+            outsourcedPartRepository.save(rtx4090);
+            outsourcedPartRepository.save(rx7900xtx);
+            outsourcedPartRepository.save(evo970);
+            outsourcedPartRepository.save(fractalTorrent);
+            outsourcedPartRepository.save(logiMouse);
+
+            productRepository.save(new Product("Entry Level PC", 800.00, 23));
+            productRepository.save(new Product("Budget Built", 1500.00, 30));
+            productRepository.save(new Product("Mid-Range PC", 2000.00, 15));
+            productRepository.save(new Product("High End PC", 3000.00, 10));
+            productRepository.save(new Product("Enthusiast Built", 4000.00, 5));
+        }
 
         System.out.println("Started in Bootstrap");
-        System.out.println("Number of Products"+productRepository.count());
+        System.out.println("Number of Products: " + productRepository.count());
         System.out.println(productRepository.findAll());
-        System.out.println("Number of Parts"+partRepository.count());
+        System.out.println("Number of Parts: " + partRepository.count());
         System.out.println(partRepository.findAll());
 
     }
