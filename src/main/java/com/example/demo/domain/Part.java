@@ -79,15 +79,25 @@ public abstract class Part implements Serializable {
         return (int) (id ^ (id >>> 32));
     }
 
+    // methods for validating inv to be in between minInv and maxInv
     public boolean isValidInventory() {
         return inv >= minInv && inv <= maxInv;
     }
 
     public void validateInventory(BindingResult bindingResult) {
+
+
         if (inv < 0) {
+            // implementing original validator (@Min = 0) for inv
             bindingResult.rejectValue("inv", "inventory.negative", "inventory cannot be negative");
         } else if (!isValidInventory()) {
-            bindingResult.rejectValue("inv", "inventory.outOfRange", "inventory must be between " + minInv + " and " + maxInv);
+            if (inv < minInv) {
+                bindingResult.rejectValue("inv", "inventory.outOfMinRange", "inventory cannot " +
+                        "be lower than minimum inventory: " + minInv);
+            } else if (inv > maxInv) {
+                bindingResult.rejectValue("inv", "inventory.outOfMaxRange", "inventory cannot " +
+                        "be higher than maximum inventory: " + maxInv);
+            }
         }
     }
 
