@@ -43,11 +43,11 @@ public class BootStrapData implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         // code used for testing empty inventories
-        /*
+
         outsourcedPartRepository.deleteAll();
         partRepository.deleteAll();
         productRepository.deleteAll();
-        */
+
 
         // sample inventory to be added on start up if zero inventory detected
         if (partRepository.count() == 0 && productRepository.count() == 0) {

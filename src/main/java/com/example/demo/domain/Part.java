@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.validation.BindingResult;
+
 /**
  *
  *
@@ -30,9 +32,8 @@ public abstract class Part implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id;
     String name;
-    @Min(value = 0, message = "Price value must be positive")
+    @Min(value = 0, message = "price value must be positive")
     double price;
-    @Min(value = 0, message = "Inventory value must be positive")
     int inv;
     @Min(value = 0)
     int minInv;
@@ -77,4 +78,21 @@ public abstract class Part implements Serializable {
     public int hashCode() {
         return (int) (id ^ (id >>> 32));
     }
+
+    public boolean isValidInven() {
+        return inv >= minInv && inv <= maxInv;
+    }
+
+    public boolean isValidInventory() {
+        return inv >= minInv && inv <= maxInv;
+    }
+
+    public void validateInventory(BindingResult bindingResult) {
+        if (inv < 0) {
+            bindingResult.rejectValue("inv", "inventory.negative", "inventory cannot be negative");
+        } else if (!isValidInventory()) {
+            bindingResult.rejectValue("inv", "inventory.outOfRange", "inventory must be between " + minInv + " and " + maxInv);
+        }
+    }
+
 }
